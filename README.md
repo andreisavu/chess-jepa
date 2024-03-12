@@ -1,5 +1,5 @@
 # Chess-JEPA 
-Exploring JEPA (Joint-Embedding Predictive Architecture) and related techniques in the world of chess to distill an algorithm that can construct a useful representation for long term planning (e.g. think N moves in advance)
+Exploring JEPA (Joint-Embedding Predictive Architecture) and related techniques in the world of chess to learn an algorithm that can construct a useful representation for long term planning (e.g. think N moves in advance)
 
 ## Training Data
 
@@ -11,10 +11,14 @@ The are a number of very strong chess engines out there. Will use https://stockf
 
 ## Training Goal
 
-Learn an internal representation of winning trajectories in the multi-dimensional world of chess (up to N steps). The input of the encoder is the current board configuration (a variation of FEN) and N moves into the future. The training process will progresively mask intermediate moves and minimize the delta in latent space with the help of a predictor that has knowledge of what was masked.
+Learn an internal representation of winning trajectories in the world of chess (up to N steps). The input of the encoder is the current board configuration (a variation of FEN), a goal token and up to N moves into the future. The training process will progresively mask intermediate moves related to the goal and minimize the delta in latent space with the help of a predictor that has knowledge of what was masked (token position).
 
-While somewhat specialized to chess for practical reasons, the technique is very generic in nature and can be scaled to other domains.
+While somewhat specialized to chess, for practical reasons, the technique is very generic in nature and can be scaled to other domains.
 
 ## Hardware Setup
 
 Will start by attempting to train this on two 4090s on my home workstation. This may or may not be enough. It really depends on the choice of hyperparameters.
+
+## Why do this work?
+
+To learn about all the different elements of the stack.
