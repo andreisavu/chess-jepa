@@ -13,6 +13,8 @@ The are a number of very strong chess engines out there. Will use https://stockf
 
 Learn an internal representation of winning trajectories in the world of chess (up to N steps). The input of the encoder is the current board configuration (a variation of FEN), a goal token and up to N moves into the future. The training process will progresively mask intermediate moves related to the goal and minimize the delta in latent space with the help of a predictor that has knowledge of what was masked (token position).
 
+On top of the encoder trained using the JEPA setup, I intend to then train an autoregressive decoder to actually play the game.
+
 While somewhat specialized to chess, for practical reasons, the technique is very generic in nature and can be scaled to other domains.
 
 ## Hardware Setup
