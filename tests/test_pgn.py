@@ -16,7 +16,6 @@ def test_simple_pgn():
     data = []
     for sample in extract_training_samples(pgn, window_size=5):
         data.append(encode(sample))
-        print(len(encode(sample)))
 
     assert len(data) == 55
     assert len(data[0]) == 84 # tokens for each sample

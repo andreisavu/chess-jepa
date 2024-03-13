@@ -3,8 +3,10 @@ import chess
 import chess.pgn
 
 
-def extract_training_samples(pgn, window_size=5):
-    game = chess.pgn.read_game(io.StringIO(pgn))
+def extract_training_samples(input, window_size=5):
+    if isinstance(input, str):
+        input = io.StringIO(input)
+    game = chess.pgn.read_game(input)
     moves = list(game.mainline_moves())
     board = game.board()
 
