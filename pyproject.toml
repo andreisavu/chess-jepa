@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-python-chess = "^1.999"
+chess = "^1.10.0"
 
 
 [tool.poetry.group.dev.dependencies]

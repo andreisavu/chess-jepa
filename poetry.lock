@@ -79,21 +79,7 @@ pluggy = ">=1.4,<2.0"
 [package.extras]
 testing = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
-[[package]]
-name = "python-chess"
-version = "1.999"
-description = "A chess library with move generation, move validation, and support for common formats."
-optional = false
-python-versions = "*"
-files = [
-    {file = "python-chess-1.999.tar.gz", hash = "sha256:8cad0388c42242d890ac6368ad64def15cd0165db033df0ad479492e266e5e6c"},
-    {file = "python_chess-1.999-py3-none-any.whl", hash = "sha256:93b562f8f1124cb7bf56fb095e18743758e69dc6a028ccda0badcaa5c59d88c8"},
-]
-
-[package.dependencies]
-chess = ">=1,<2"
-
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "b1fe71e1f26a4c3d2a75b80a33e9d4cada4ff8c33c1df56bcf21ee2bbea4b094"
+content-hash = "2d15a8c579ec9d0da6c33530b4eb91812cddb4b78981eca20f0ac84fce424246"

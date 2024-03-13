@@ -52,9 +52,9 @@ def _initialize_default_vocabulary() -> Vocabulary:
     """
     Initializes the vocabulary with the default tokens.
     """
-    vocab = Vocabulary(padding_token="<pad>")
+    vocab = Vocabulary(padding_token="<_>")
 
-    vocab.add_token("<start>")  # Start of the sequence of moves
+    vocab.add_token("<start>")  # Start of the game
     vocab.add_token("<1-0>")  # White wins
     vocab.add_token("<0-1>")  # Black wins
     vocab.add_token("<1/2-1/2>")  # Draw

@@ -22,9 +22,9 @@ def test_tokenize_masked_uci():
 
 
 def test_typical_training_example():
-    past_uci = "<pad> <pad> <start> e2e4 e7e5 g1f3 b8c6 f1c4 d7d6"
+    past_uci = "<_> <_> <start> e2e4 e7e5 ? b8c6 f1c4 d7d6"
     input_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -"
-    future_uci = "e1g1 e8g8 <1-0> <pad> <pad>"
+    future_uci = "e1g1 e8g8 <1-0> <_> <_>"
 
     expected = (
         past_uci.replace(" ", "")

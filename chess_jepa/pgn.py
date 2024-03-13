@@ -1,0 +1,52 @@
+import io
+import chess
+import chess.pgn
+
+
+def extract_training_samples(pgn, window_size=5):
+    game = chess.pgn.read_game(io.StringIO(pgn))
+    moves = list(game.mainline_moves())
+    board = game.board()
+
+    before_moves = ["<_>"] * (window_size - 1) + ["<start>"]
+    after_moves = []
+
+    # Play all the moves and fill the after buffer
+    for move in moves:
+        if len(after_moves) < window_size:
+            after_moves.append(move.uci())
+        else:
+            before_moves.pop(0)
+
+            move_to_play = after_moves.pop(0)
+            board.push(chess.Move.from_uci(move_to_play))
+
+            before_moves.append(move_to_play)
+            after_moves.append(move.uci())
+
+        trimed_fen = board.fen().split(" ")[:-2]
+        yield " ".join(
+            before_moves
+            + trimed_fen
+            + after_moves
+            + ["<_>"] * (window_size - len(after_moves))
+        )
+
+    # Play all the moves left in the after buffer
+    outcome_token = "<" + game.headers["Result"] + ">"
+    for index in range(len(after_moves)):
+        before_moves.pop(0)
+
+        move_to_play = after_moves.pop(0)
+        board.push(chess.Move.from_uci(move_to_play))
+
+        before_moves.append(move_to_play)
+        after_moves.append(outcome_token if index == 0 else "<_>")
+
+        trimed_fen = board.fen().split(" ")[:-2]
+        yield " ".join(
+            before_moves
+            + trimed_fen
+            + after_moves
+            + ["<_>"] * (window_size - len(after_moves))
+        )
