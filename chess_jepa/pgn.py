@@ -2,6 +2,8 @@ import io
 import chess
 import chess.pgn
 
+from .tokenizer import PADDING_TOKEN, START_TOKEN
+
 
 def extract_training_samples(input, window_size=5):
     if isinstance(input, str):
@@ -10,7 +12,11 @@ def extract_training_samples(input, window_size=5):
     moves = list(game.mainline_moves())
     board = game.board()
 
-    before_moves = ["<_>"] * (window_size - 1) + ["<start>"]
+    before_moves = [
+        PADDING_TOKEN,
+    ] * (window_size - 1) + [
+        START_TOKEN,
+    ]
     after_moves = []
 
     # Play all the moves and fill the after buffer
@@ -31,7 +37,7 @@ def extract_training_samples(input, window_size=5):
             before_moves
             + trimed_fen
             + after_moves
-            + ["<_>"] * (window_size - len(after_moves))
+            + [PADDING_TOKEN, ] * (window_size - len(after_moves))
         )
 
     # Play all the moves left in the after buffer
@@ -43,12 +49,15 @@ def extract_training_samples(input, window_size=5):
         board.push(chess.Move.from_uci(move_to_play))
 
         before_moves.append(move_to_play)
-        after_moves.append(outcome_token if index == 0 else "<_>")
+        after_moves.append(outcome_token if index == 0 else PADDING_TOKEN)
 
         trimed_fen = board.fen().split(" ")[:-2]
         yield " ".join(
             before_moves
             + trimed_fen
             + after_moves
-            + ["<_>"] * (window_size - len(after_moves))
+            + [
+                PADDING_TOKEN,
+            ]
+            * (window_size - len(after_moves))
         )

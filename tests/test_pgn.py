@@ -18,7 +18,7 @@ def test_simple_pgn():
         data.append(encode(sample))
 
     assert len(data) == 55
-    assert len(data[0]) == 84 # tokens for each sample
+    assert len(data[0]) == 94 # tokens for each sample
     
     # verify that all the samples have the same length
     assert len(set(len(sample) for sample in data)) == 1

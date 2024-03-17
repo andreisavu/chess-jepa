@@ -2,6 +2,9 @@
 Handcrafted tokenizer. This is as minimal as it can be for the game of chess.
 """
 
+PADDING_TOKEN = "_"
+START_TOKEN = "<s>"
+
 
 class Vocabulary:
     def __init__(self, padding_token):
@@ -52,9 +55,9 @@ def _initialize_default_vocabulary() -> Vocabulary:
     """
     Initializes the vocabulary with the default tokens.
     """
-    vocab = Vocabulary(padding_token="<_>")
+    vocab = Vocabulary(padding_token=PADDING_TOKEN)
 
-    vocab.add_token("<start>")  # Start of the game
+    vocab.add_token(START_TOKEN)  # Start of the game
     vocab.add_token("<1-0>")  # White wins
     vocab.add_token("<0-1>")  # Black wins
     vocab.add_token("<1/2-1/2>")  # Draw
@@ -82,13 +85,6 @@ def _initialize_default_vocabulary() -> Vocabulary:
         for rank in "12345678":
             vocab.add_token(file + rank)
 
-    # All the possible moves in the standard UCI notation
-    for file1 in "abcdefgh":
-        for rank1 in "12345678":
-            for file2 in "abcdefgh":
-                for rank2 in "12345678":
-                    vocab.add_token(file1 + rank1 + file2 + rank2)
-
     # Masked move (used during training to mask the target move in the input sequence)
     vocab.add_token("?")
 
@@ -105,7 +101,21 @@ def encode(input: str) -> list[int]:
     result = []
     for word in input.split(" "):
         if word in default_vocabulary:
+            # In order to make the context window size fixed, we add the padding token
+            # before the start token and after the end game tokens. This way, all the
+            # tokens outside outside of FEN and UCI moves will use two tokens. Yeah, this
+            # is a bit of a hack, but it works.
+            if word == PADDING_TOKEN:
+                result.append(default_vocabulary.get_index(word))
+            if word == START_TOKEN:
+                result.append(default_vocabulary.get_index(PADDING_TOKEN))
             result.append(default_vocabulary.get_index(word))
+            if word != START_TOKEN and word.startswith("<") and word.endswith(">"):
+                result.append(default_vocabulary.get_index(PADDING_TOKEN))
+        elif len(word) == 4:
+            # this is an UCI formatted move - generate two tokens
+            result.append(default_vocabulary.get_index(word[:2]))
+            result.append(default_vocabulary.get_index(word[2:]))
         else:
             assert "/" in word, f"Unknown token: {word}"
             # If the word is not in the vocabulary, encode it character by character
