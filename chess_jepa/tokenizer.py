@@ -85,6 +85,16 @@ def _initialize_default_vocabulary() -> Vocabulary:
         for rank in "12345678":
             vocab.add_token(file + rank)
 
+    # For all ranks, when on the first (1) or last (8) file, encode the promotion moves
+    for file in "abcdefgh":
+        for piece in "qrbn":
+            # Black pieces in lowercase
+            vocab.add_token(file + "1" + piece)
+            vocab.add_token(file + "8" + piece)
+            # And uppercase for the white pieces
+            vocab.add_token(file + "1" + piece.upper())
+            vocab.add_token(file + "8" + piece.upper())
+
     # Masked move (used during training to mask the target move in the input sequence)
     vocab.add_token("?")
 
@@ -112,7 +122,7 @@ def encode(input: str) -> list[int]:
             result.append(default_vocabulary.get_index(word))
             if word != START_TOKEN and word.startswith("<") and word.endswith(">"):
                 result.append(default_vocabulary.get_index(PADDING_TOKEN))
-        elif len(word) == 4:
+        elif len(word) == 4 or len(word) == 5 and word[4] in "qrbn":
             # this is an UCI formatted move - generate two tokens
             result.append(default_vocabulary.get_index(word[:2]))
             result.append(default_vocabulary.get_index(word[2:]))

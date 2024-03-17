@@ -2,7 +2,7 @@ from chess_jepa.tokenizer import encode, decode, default_vocabulary
 
 
 def test_vocabulary():
-    assert len(default_vocabulary) == 98
+    assert len(default_vocabulary) == 226
 
 
 def test_tokenize_only_fen():
@@ -24,7 +24,7 @@ def test_tokenize_masked_uci():
 def test_typical_training_example():
     past_uci = "_ _ <s> e2e4 e7e5 ? b8c6 f1c4 d7d6"
     input_fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -"
-    future_uci = "e1g1 e8g8 <1-0> _ _"
+    future_uci = "e1g1 e8g8q <1-0> _ _"
 
     expected = (
         past_uci.replace(" ", "")
